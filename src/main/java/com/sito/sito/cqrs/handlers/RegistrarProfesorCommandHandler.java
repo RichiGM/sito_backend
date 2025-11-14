@@ -1,10 +1,13 @@
 package com.sito.sito.cqrs.handlers;
 
 import com.sito.sito.cqrs.commands.RegistrarProfesorCommand;
+import com.sito.sito.dao.EmpleadoDAO;
 import com.sito.sito.dao.UsuarioDAO;
+import com.sito.sito.model.Empleado;
 import com.sito.sito.model.RolEnum;
 import com.sito.sito.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,6 +15,12 @@ public class RegistrarProfesorCommandHandler {
 
     @Autowired
     private UsuarioDAO usuarioDAO;
+
+    @Autowired
+    private EmpleadoDAO empleadoDAO;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Usuario handle(RegistrarProfesorCommand command) {
         if (usuarioDAO.findByUsuario(command.getUsuario()) != null) {
@@ -24,9 +33,18 @@ public class RegistrarProfesorCommandHandler {
         Usuario nuevoProfesor = new Usuario(
                 command.getMatricula(),
                 command.getUsuario(),
-                command.getContrasena(),
+                passwordEncoder.encode(command.getContrasena()),
                 RolEnum.PROFESOR
         );
-        return usuarioDAO.save(nuevoProfesor);
+        usuarioDAO.save(nuevoProfesor);
+
+        Empleado empleado = new Empleado(
+                command.getMatricula(),
+                command.getNombreCompleto(),
+                "PROFESOR"
+        );
+        empleadoDAO.save(empleado);
+
+        return nuevoProfesor;
     }
 }

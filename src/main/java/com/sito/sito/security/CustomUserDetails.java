@@ -8,29 +8,27 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-public class CustomUserDetails extends Usuario implements UserDetails {
+public class CustomUserDetails implements UserDetails {
+
+    private final Usuario usuario;
 
     public CustomUserDetails(Usuario usuario) {
-        // Cambiar setId por setMatricula ya que no tienes campo id
-        this.setMatricula(usuario.getMatricula());
-        this.setUsuario(usuario.getUsuario());
-        this.setContrasena(usuario.getContrasena());
-        this.setRol(usuario.getRol());
+        this.usuario = usuario;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.getRol().name()));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getRol().name()));
     }
 
     @Override
     public String getPassword() {
-        return this.getContrasena();
+        return usuario.getContrasena();
     }
 
     @Override
     public String getUsername() {
-        return this.getUsuario();
+        return usuario.getUsuario();
     }
 
     @Override

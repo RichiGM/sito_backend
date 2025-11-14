@@ -3,9 +3,9 @@ package com.sito.sito.model;
 import lombok.Data;
 
 @Data
-public class RegistroProfesorRequest {
+public class AlumnoConInscripcion {
+    private Integer inscripcionId;
     private String matricula;
-    private String usuario;
-    private String contrasena;
     private String nombreCompleto;
+    private String carrera;
 }

@@ -30,18 +30,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            LoginCommand command = new LoginCommand(
-                    loginRequest.getUsuario(),
-                    loginRequest.getContrasena()
-            );
-
+            LoginCommand command = new LoginCommand(loginRequest.getUsuario(), loginRequest.getContrasena());
             LoginResponse response = loginCommandHandler.handle(command);
             return ResponseEntity.ok(response);
-
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body(
-                    Map.of("error", "Usuario o contraseña incorrectos")
-            );
+            return ResponseEntity.status(401).body(Map.of("error", "Usuario o contraseña incorrectos"));
         }
     }
 
@@ -49,20 +42,11 @@ public class AuthController {
     public ResponseEntity<?> cambiarContrasena(@RequestBody CambioContrasenaRequest request) {
         try {
             CambiarContrasenaCommand command = new CambiarContrasenaCommand(
-                    request.getUsuario(),
-                    request.getContrasenaActual(),
-                    request.getNuevaContrasena()
-            );
-
+                    request.getUsuario(), request.getContrasenaActual(), request.getNuevaContrasena());
             cambiarContrasenaCommandHandler.handle(command);
-
-            return ResponseEntity.ok(
-                    Map.of("message", "Contraseña cambiada exitosamente")
-            );
+            return ResponseEntity.ok(Map.of("message", "Contraseña cambiada exitosamente"));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("error", e.getMessage())
-            );
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -70,22 +54,13 @@ public class AuthController {
     public ResponseEntity<?> registrarAlumno(@RequestBody RegistroAlumnoRequest request) {
         try {
             RegistrarAlumnoCommand command = new RegistrarAlumnoCommand(
-                    request.getMatricula(),
-                    request.getUsuario(),
-                    request.getContrasena()
-            );
-
+                    request.getMatricula(), request.getUsuario(), request.getContrasena(),
+                    request.getNombreCompleto(), request.getCarrera());
             Usuario nuevoAlumno = registrarAlumnoCommandHandler.handle(command);
-
-            return ResponseEntity.ok(Map.of(
-                    "message", "Alumno registrado exitosamente",
-                    "matricula", nuevoAlumno.getMatricula(),
-                    "usuario", nuevoAlumno.getUsuario()
-            ));
+            return ResponseEntity.ok(Map.of("message", "Alumno registrado exitosamente",
+                    "matricula", nuevoAlumno.getMatricula(), "usuario", nuevoAlumno.getUsuario()));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("error", e.getMessage())
-            );
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -93,22 +68,12 @@ public class AuthController {
     public ResponseEntity<?> registrarProfesor(@RequestBody RegistroProfesorRequest request) {
         try {
             RegistrarProfesorCommand command = new RegistrarProfesorCommand(
-                    request.getMatricula(),
-                    request.getUsuario(),
-                    request.getContrasena()
-            );
-
+                    request.getMatricula(), request.getUsuario(), request.getContrasena(), request.getNombreCompleto());
             Usuario nuevoProfesor = registrarProfesorCommandHandler.handle(command);
-
-            return ResponseEntity.ok(Map.of(
-                    "message", "Profesor registrado exitosamente",
-                    "matricula", nuevoProfesor.getMatricula(),
-                    "usuario", nuevoProfesor.getUsuario()
-            ));
+            return ResponseEntity.ok(Map.of("message", "Profesor registrado exitosamente",
+                    "matricula", nuevoProfesor.getMatricula(), "usuario", nuevoProfesor.getUsuario()));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("error", e.getMessage())
-            );
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 }

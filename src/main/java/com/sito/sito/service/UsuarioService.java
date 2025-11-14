@@ -1,4 +1,3 @@
-// UsuarioService.java (MODIFICADO CORRECTAMENTE)
 package com.sito.sito.service;
 
 import com.sito.sito.cqrs.handlers.FindUsuarioByMatriculaQueryHandler;

@@ -22,7 +22,6 @@ public class Usuario {
     @Column(nullable = false)
     private RolEnum rol;
 
-    // Constructors
     public Usuario() {}
 
     public Usuario(String matricula, String usuario, String contrasena, RolEnum rol) {

@@ -16,7 +16,7 @@ public class JwtUtil {
     private String secret;
 
     @Value("${app.jwt.expiration}")
-    private long expiration;
+    private long expiration = 3600000; // 1 hora por default
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
@@ -42,10 +42,7 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser()
-                    .verifyWith(getSigningKey())
-                    .build()
-                    .parseSignedClaims(token);
+            Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token);
             return true;
         } catch (Exception e) {
             return false;
